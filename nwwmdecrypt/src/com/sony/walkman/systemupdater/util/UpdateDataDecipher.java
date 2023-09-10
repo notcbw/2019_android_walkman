@@ -116,7 +116,7 @@ public final class UpdateDataDecipher {
                                 updateDataDecipher.mOut.delete();
                                 throw new DecihperErrorException("Checksum does not match!");
                             } else {
-                                Boolean.valueOf(updateDataDecipher.mSrc.delete());
+                                //Boolean.valueOf(updateDataDecipher.mSrc.delete());
                                 return;
                             }
                         } catch (Exception e4) {
