@@ -12,7 +12,7 @@ The encryption key is stored in plain text at `/vendor/usr/data/icx_nvp.cfg` as 
 
 ### Key Combo to Fastboot Mode
 
-Hold Vol- & Vol+ & Next & Play/Pause when powering on.
+Hold Vol- & Next when powering on.
 
 ## Guides
 
@@ -30,4 +30,5 @@ The kernel source is at [https://prodgpl.blob.core.windows.net/download/Audio/20
 
 ## Unpacked Fastboot Firmware
 
-- NW-ZX500 4.04 Chinese Version (No Google services, better battery life): [https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing](https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing)
+- NW-ZX500 series 4.04 Chinese Version (No Google services, better battery life): [https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing](https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing)
+- NW-A100 series 4.06 International: [https://drive.google.com/file/d/1hiNf9VFeh0osPwbGtI2NeH9T5AHZtUJK/view?usp=sharing](https://drive.google.com/file/d/1hiNf9VFeh0osPwbGtI2NeH9T5AHZtUJK/view?usp=sharing)
