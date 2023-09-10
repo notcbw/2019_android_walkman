@@ -1,0 +1,70 @@
+config DRM_IMX
+	tristate "DRM Support for Freescale i.MX"
+	select DRM_KMS_HELPER
+	select VIDEOMODE_HELPERS
+	select DRM_GEM_CMA_HELPER
+	select DRM_KMS_CMA_HELPER
+	depends on DRM
+	depends on IMX_IPUV3_CORE || IMX_DPU_CORE || IMX_DCSS_CORE || IMX_LCDIF_CORE
+	help
+	  enable i.MX graphics support
+
+config DRM_IMX_PARALLEL_DISPLAY
+	tristate "Support for parallel displays"
+	select DRM_PANEL
+	depends on DRM_IMX
+	select VIDEOMODE_HELPERS
+
+config DRM_IMX_TVE
+	tristate "Support for TV and VGA displays"
+	depends on DRM_IMX
+	select REGMAP_MMIO
+	help
+	  Choose this to enable the internal Television Encoder (TVe)
+	  found on i.MX53 processors.
+
+config DRM_IMX_LDB
+	tristate "Support for LVDS displays"
+	depends on DRM_IMX && MFD_SYSCON
+	select DRM_PANEL
+	help
+	  Choose this to enable the internal LVDS Display Bridge (LDB)
+	  found on i.MX53, i.MX6 and i.MX8 processors.
+
+config DRM_IMX_IPUV3
+	tristate
+	depends on DRM_IMX
+	depends on IMX_IPUV3_CORE
+	default y if DRM_IMX=y
+	default m if DRM_IMX=m
+
+config DRM_IMX_HDMI
+	tristate "Freescale i.MX DRM HDMI"
+	select DRM_DW_HDMI
+	depends on DRM_IMX
+	help
+	  Choose this if you want to use HDMI on i.MX6.
+
+config DRM_IMX_NWL_DSI
+	tristate "Support for Northwest Logic MIPI DSI displays"
+	depends on DRM_IMX
+	select MFD_SYSCON
+	select DRM_NWL_DSI
+	help
+	  Choose this to enable the internal NWL MIPI DSI controller
+	  found on i.MX8 processors.
+
+config DRM_IMX_SEC_DSIM
+	tristate "Support for Samsung MIPI DSIM displays"
+	depends on DRM_IMX
+	select MFD_SYSCON
+	select DRM_SEC_MIPI_DSIM
+	help
+	  Choose this to enable the internal SEC MIPI DSIM controller
+          found on i.MX platform.
+
+source "drivers/gpu/drm/imx/ipuv3/Kconfig"
+source "drivers/gpu/drm/imx/dpu/Kconfig"
+source "drivers/gpu/drm/imx/hdp/Kconfig"
+source "drivers/gpu/drm/imx/dcss/Kconfig"
+source "drivers/gpu/drm/imx/lcdif/Kconfig"

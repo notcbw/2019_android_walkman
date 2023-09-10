@@ -1,0 +1,78 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright 2018 Sony Video & Sound Products Inc.
+ */
+
+#include "sony-imx8mm-dmp1.dts"
+
+/ {
+	model = "ICX1295";
+
+	thermal-zones {
+		cpu-thermal {
+			trips {
+				cpu_alert0: trip0 {
+					temperature = <65000>;
+				};
+			};
+		};
+	};
+};
+
+&i2c1 {
+	accelerometer1: bma422@18 {
+		bma4xy,axis_map = "-x", "+y", "-z";
+	};
+	accelerometer2: bma422@19 {
+		bma4xy,axis_map = "-x", "+y", "-z";
+	};
+	gauge: max1704x@36 {
+		full_battery_capacity = <1500000>; /* uAh */
+		/* Battery model */
+		empty_adjustment = <0>;
+		full_adjustment = <100>;
+		rcomp0 = <64>;
+		temp_co_up = <(-15625)>; /* x100000 */
+		temp_co_down = <(-525000)>; /* x100000 */
+		ocv_test = <55632>;
+		soc_check_a = <104>;
+		soc_check_b = <106>;
+		bits = <18>;
+		rcomp_seg = <0x0100>;
+		model_data = [
+			A4 10 B5 20 B8 90 BB 20 BB E0 BC 90 BD 10 BD A0
+			BE 50 BF 20 C0 F0 C3 10 C5 60 C7 90 CD 70 CF 50
+			00 20 0C 50 10 90 1C 60 1F 80 25 60 2A 50 1F 30
+			1A 00 10 40 0E 50 0C 40 10 C0 0A 30 02 00 02 00
+		];
+	};
+};
+
+&i2c3 {
+	cxd3778gf: cxd3778gf {
+		pwm_phdly_btl = <0x03>;
+		pwm_phdly_se = <0x08>;
+	};
+	lif_md6000_rme: lif_md6000_rme {
+		compatible = "sony,lif-md6000-rme";
+		reg = <0x41>;
+		status = "okay";
+		rme_wkup-gpio = <&gpio1 11 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&ecspi2 {
+	rme_write: rme_write@2 {
+		compatible = "lattice,lifmd6000";
+		spi-max-frequency = <20000000>;
+		reg = <2>;
+		cs-gpio = <&gpio5 9 GPIO_ACTIVE_HIGH>;
+		en-gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
+		wkup-gpio = <&gpio1 11 GPIO_ACTIVE_HIGH>;
+		rst-gpio = <&gpio1 26 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&micfil {
+        initial_gain = <0xB>; /* 0x00 ~ 0x0F */
+};

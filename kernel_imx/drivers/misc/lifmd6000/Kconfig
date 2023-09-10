@@ -1,0 +1,9 @@
+#
+# LIF-MD6000 RME FW write driver configuration
+#
+
+config LIFMD6000_RME_FW_WRITE
+	tristate "LIF-MD6000 RME FW write driver"
+	select SPI
+	help
+	  LIFMD6000 RME FW write driver.

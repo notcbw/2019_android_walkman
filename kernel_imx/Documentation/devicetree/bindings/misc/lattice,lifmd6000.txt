@@ -1,0 +1,24 @@
+* DSD Remastering Engine's firmware file writer driver for ICX1295
+  (Serial Peripheral Interface)
+
+Required properties:
+- compatible :
+  - "lattice,lifmd6000" for DSD RME FW writer
+- spi-max-frequency : Speed of spi communication
+- reg : Offset and length of the register set for the device
+- cs-gpios : Specifies the gpio pins to be used for chipselects.
+- en-gpios : Specifies the gpio pins to be used for RME power.
+- wkup-gpios : Specifies the gpio pins to be used for RME wakeup.
+- rst-gpios : Specifies the gpio pins to be used for RME reset.
+
+Example:
+	rme_write: rme_write@2 {
+		compatible = "lattice,lifmd6000";
+		spi-max-frequency = <20000000>;
+		reg = <2>;
+		cs-gpio = <&gpio5 9 GPIO_ACTIVE_HIGH>;
+		en-gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
+		wkup-gpio = <&gpio1 11 GPIO_ACTIVE_HIGH>;
+		rst-gpio = <&gpio1 26 GPIO_ACTIVE_HIGH>;
+	};
+};

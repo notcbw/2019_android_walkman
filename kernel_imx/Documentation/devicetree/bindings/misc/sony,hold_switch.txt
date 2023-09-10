@@ -1,0 +1,17 @@
+Device-Tree bindings for misc/hold_switch.c driver
+
+Required properties:
+	- compatible = "sony,hold_switch";
+	- hold-gpios: A spec of gpio to detect switch state.
+
+Optional properties:
+	- debounce-interval: Debouncing interval time in milliseconds.
+	  If not specified default to 10.
+
+Example:
+
+	hold_switch {
+		compatible = "sony,hold_switch";
+		hold-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+		debounce-interval = <15>;
+	};

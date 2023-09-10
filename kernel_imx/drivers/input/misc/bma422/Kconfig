@@ -1,0 +1,22 @@
+#
+# Makefile for Bosch sensors driver.
+#
+config BOSCH_DRIVER_LOG_FUNC
+	tristate "Bosch Sensortec driver smart log function support"
+	depends on (I2C || SPI_MASTER) && SYSFS
+	help
+	 If you say yes here, you get support for smart log function in Bosch Sensortec driver.
+
+config SENSORS_BMA4XY
+	tristate "BMA4XY Sensor Support"
+	depends on I2C || SPI_MASTER
+	help
+	 If you say yes here, you get support for Bosch Sensortec's sensor driver of BMA4XY.
+
+config BMA4XY_MAG_INTERFACE_SUPPORT
+	tristate "BMA4XY Sensor mag interface support"
+	depends on SENSORS_BMA4XY
+	help
+	 If you say yes here, you get support for Bosch Sensortec's
+	 sensor driver of BMA4XY with mag sensor support.
+

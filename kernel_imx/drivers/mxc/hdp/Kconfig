@@ -1,0 +1,5 @@
+config MX8_HDP
+	tristate "IMX8 HDP API "
+
+config MX8_HDP_RX
+	tristate "IMX8 HDP RX API "

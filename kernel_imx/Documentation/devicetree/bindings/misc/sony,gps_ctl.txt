@@ -1,0 +1,18 @@
+GPS pin control on gpio
+
+Required properties:
+- compatible: "sony,gps_ctl"
+- xrst-gpios: one gpio-specifier for "gps_xrst"
+- boot-gpios: one gpio-specifier for "gps_boot_rec"
+  You can omit gpio of unused pins
+- reset_time_us: Reset pulse length, microsecond unit
+
+Example:
+
+	gps_ctl {
+		compatible = "sony,gps_ctl";
+		xrst-gpios = <&gpio3 14 GPIO_ACTIVE_LOW>;
+		boot-gpios = <&gpio3 9 GPIO_ACTIVE_HIGH>;
+		reset_time_us = <100000>;
+	};
+

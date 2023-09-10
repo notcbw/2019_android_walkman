@@ -1,0 +1,48 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright 2018 Sony Video & Sound Products Inc.
+ */
+
+#include "sony-imx8mm-dmp1.dts"
+
+/ {
+	model = "ICX1293";
+	thermal-zones {
+		cpu-thermal {
+			trips {
+				cpu_alert0: trip0 {
+					temperature = <75000>;
+				};
+			};
+		};
+	};
+};
+
+&i2c1 {
+	accelerometer1: bma422@18 {
+		bma4xy,axis_map = "-y", "+x", "+z";
+	};
+	accelerometer2: bma422@19 {
+		bma4xy,axis_map = "-y", "+x", "+z";
+	};
+	gauge: max1704x@36 {
+		full_battery_capacity = <1285000>; /* uAh */
+		/* Battery model */
+		empty_adjustment = <0>;
+		full_adjustment = <100>;
+		rcomp0 = <60>;
+		temp_co_up = <(-0)>; /* x100000 */
+		temp_co_down = <(-350000)>; /* x100000 */
+		ocv_test = <55648>;
+		soc_check_a = <104>;
+		soc_check_b = <106>;
+		bits = <18>;
+		rcomp_seg = <0x0100>;
+		model_data = [
+			AA 80 B6 10 B9 50 BA 80 BB B0 BC 70 BD 40 BE 10
+			BF 00 C0 00 C1 20 C3 60 C5 80 C8 20 CD 90 CF 60
+			00 80 0E 00 13 40 0F F0 20 90 2A F0 24 20 1F 20
+			10 70 0E A0 0E 00 0C E0 0E D0 0A A0 02 00 02 00
+		];
+	};
+};

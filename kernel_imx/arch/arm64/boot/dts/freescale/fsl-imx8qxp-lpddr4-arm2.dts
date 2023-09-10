@@ -1,0 +1,60 @@
+// SPDX-License-Identifier: GPL-2.0+
+/*
+ * Copyright 2017~2018 NXP
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/dts-v1/;
+
+#include "fsl-imx8qxp.dtsi"
+#include "fsl-imx8x-arm2.dtsi"
+
+/ {
+	firmware {
+		android {
+			compatible = "android,firmware";
+			fstab {
+				compatible = "android,fstab";
+				vendor {
+					compatible = "android,vendor";
+					/* sd card node which used if androidboot.storage_type=sd */
+					dev_sd = "/dev/block/platform/5b020000.usdhc/by-name/vendor";
+					type = "ext4";
+					mnt_flags = "ro,barrier=1,inode_readahead_blks=8";
+					fsmgr_flags = "wait,slotselect,avb";
+				};
+			};
+			vbmeta {
+				/*we need use FirstStageMountVBootV2 if we enable avb*/
+				compatible = "android,vbmeta";
+				/*parts means the partition witch can be mount in first stage*/
+				parts = "vbmeta,boot,system,vendor";
+			};
+		};
+	};
+};
+
+/ {
+    model = "Freescale i.MX8QXP LPDDR4 ARM2";
+    compatible = "fsl,imx8qxp-lpddr4-arm2", "fsl,imx8qxp";
+};
+
+&usbotg3 {
+    dr_mode = "otg";
+    extcon = <&typec_ptn5150>;
+    status = "okay";
+};
+
+&vpu_decoder {
+    core_type = <1>;
+    status = "okay";
+};

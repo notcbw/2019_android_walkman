@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright 2019 Sony Home Entertainment & Sound Products Inc.
+ */
+
+#include "sony-imx8mm-icx1295-common.dts"
+
+&usdhc3 {
+	fsl,emmc-drive-strength-tsb = <0>; /* For Toshiba */
+	fsl,emmc-drive-strength-hyx = <0>; /* For Hynix */
+	fsl,emmc-drive-strength-smg = <0>; /* For Samsung */
+};
+
+/ {
+	reg-virtual {
+		compatible = "sony,icx-virtual-regulator";
+		/* lpa-poff-gpio = <&gpio4 5 GPIO_ACTIVE_HIGH>; */
+	};
+};
+

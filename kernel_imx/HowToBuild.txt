@@ -1,0 +1,8 @@
+Kernel Configuration Information
+
+The kernel is configured with following defconfig.
+
+linux-kernel-4.14.78.tar.gz
+arch/arm64/configs/android_dmp1_defconfig
+
+Please compile using this configuration.

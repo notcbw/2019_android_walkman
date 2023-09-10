@@ -1,0 +1,119 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright 2019 Sony Video & Sound Products Inc.
+ */
+
+#include "sony-imx8mm-icx1295-common.dts"
+
+&i2c1 {
+	charger1: bq25898@6b {
+		ti,jeita-high-temp-voltage = <0>; /* -0mV */
+
+		/* TSPCT to temperature table. Converts REG10 value to
+		 * 0.1 unit Celsius. For example,
+		 * the element value 200 means 20.0 Celsius.
+		 * ICX platform circut constants are shown in following lines.
+		 * R1 = 100.00kOHM, R2 = 34.00kOHM, R3 = 1180.00kOHM
+		 * NTC = 100.00kOHM, B = 4250.00
+		 */
+		svs,ntc-self-stand = [
+		7fff 7fff 7fff 7fff 7fff 7fff 7fff 7fff 7fff 0755
+		05cc 0514 049e 0448 0405 03ce 03a0 0377 0354 0335
+		0318 02fe 02e7 02d1 02bc 02a9 0297 0286 0276 0267
+		0258 024b 023d 0231 0224 0219 020d 0202 01f8 01ee
+		01e4 01da 01d1 01c7 01be 01b6 01ad 01a5 019d 0195
+		018d 0185 017e 0176 016f 0168 0161 015a 0153 014c
+		0146 013f 0139 0132 012c 0125 011f 0119 0113 010d
+		0107 0101 00fb 00f5 00f0 00ea 00e4 00de 00d9 00d3
+		00cd 00c8 00c2 00bd 00b7 00b2 00ac 00a7 00a1 009c
+		0096 0091 008b 0086 0080 007b 0075 0070 006a 0064
+		005f 0059 0054 004e 0048 0043 003d 0037 0031 002b
+		0025 001f 0019 0013 000d 0007 0000 fffb fff5 ffee
+		ffe7 ffe0 ffda ffd3 ffcb ffc4 ffbc ffb5];
+
+		/* TSPCT to temperature table. Converts REG10 value to
+		 * 0.1 unit Celsius. For example,
+		 * the element value 200 means 20.0 Celsius.
+		 * ICX platform circut constants are shown in following lines.
+		 * R1 = 100.00kOHM, R2 = 12.00kOHM, R3 = 1180.00kOHM
+		 * NTC = 100.00kOHM, B = 4250.00
+		 */
+		svs,ntc-vbus-incoming = [
+		02c0 02b2 02a4 0298 028b 0280 0274 0269 025e 0254
+		024a 0241 0237 022e 0225 021c 0214 020c 0204 01fc
+		01f4 01ec 01e5 01de 01d7 01d0 01c9 01c2 01bb 01b5
+		01ae 01a8 01a2 019b 0195 018f 0189 0183 017e 0178
+		0172 016d 0167 0162 015c 0157 0151 014c 0147 0142
+		013d 0137 0132 012d 0128 0123 011e 0119 0114 0110
+		010b 0106 0101 00fc 00f8 00f3 00ee 00e9 00e5 00e0
+		00db 00d7 00d2 00cd 00c9 00c4 00bf 00bb 00b6 00b1
+		00ad 00a8 00a3 009f 009a 0095 0091 008c 0087 0082
+		007e 0079 0074 006f 006a 0066 0061 005c 0057 0052
+		004d 0048 0043 003e 0039 0033 002e 0029 0023 001e
+		0019 0013 000d 0008 0002 fffd fff7 fff1 ffeb ffe5
+		ffdf ffd8 ffd2 ffcb ffc4 ffbd ffb6 ffaf];
+	};
+};
+
+&usdhc2 {
+	/*  svs,icx-cd-gpios SVS modification:
+	 *   index
+	 *    0:    Active(Insert) Low configuration.
+	 *    1:    Active(Insert) High configuration.
+	 */
+	svs,icx-cd-gpios =
+		   <&gpio2 12 GPIO_ACTIVE_LOW>,  /* ICX1293 GPIO2_IO12 Low active */
+		   <&gpio2 12 GPIO_ACTIVE_HIGH>; /* ICX1295 GPIO2_IO12 High active */
+};
+
+&usdhc3 {
+	max-frequency-limit = <50000000>; /* 50MHz. (Would be changed on runtime) */
+};
+
+&gpio5 {
+	pinctrl-0 = <&pinctrl_bl_en>, <&pinctrl_xpwr>, <&pinctrl_rme_spi_cs>, <&pinctrl_key_gpio5>, <&pinctrl_wr_led_ctl>;
+};
+
+&iomuxc {
+	imx8mm-evk {
+		pinctrl_charger1: charger1_grp {
+			fsl,pins = <
+		/* CHG_EN */	MX8MM_IOMUXC_SAI1_RXD3_GPIO4_IO5  /* Ox /CE */	0x086
+		/* CHG_XINT */	MX8MM_IOMUXC_SAI1_RXD5_GPIO4_IO7  /* I  INT */	0x1c6
+		/* CHG_LED_ON*/ MX8MM_IOMUXC_SAI1_RXD6_GPIO4_IO8  /* Ox NC */	0x086
+		/* OTG_EN */	MX8MM_IOMUXC_SAI1_TXD7_GPIO4_IO19 /* O  OTG */	0x086
+			>;
+		};
+
+		pinctrl_bl_en: bl_en_grp {
+			fsl,pins = <
+				MX8MM_IOMUXC_SPDIF_TX_GPIO5_IO3			0x06
+			>;
+		};
+
+		pinctrl_usdhc2_cd_pullnone: usdhc2grpcdpullnone {
+			fsl,pins = <
+		/* SD_XINS */	MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12 /* I */ 0x080
+			>;
+		};
+
+		pinctrl_usdhc2_cd_pulldown: usdhc2grpcdpulldown {
+			fsl,pins = <
+		/* SD_XINS */	MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12 /* Id*/ 0x180
+			>;
+		};
+
+		pinctrl_usdhc2_cd_pullup: usdhc2grpcdpullup {
+			fsl,pins = <
+		/* SD_XINS */	MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12 /* Iu*/ 0x1c0
+			>;
+		};
+
+		pinctrl_wr_led_ctl: wr_led_ctl_grp {
+			fsl,pins = <
+				MX8MM_IOMUXC_SPDIF_TX_GPIO5_IO3			0x06
+			>;
+		};
+	};
+};
+

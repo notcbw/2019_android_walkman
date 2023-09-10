@@ -1,0 +1,137 @@
+/*
+ * Copyright (C) 2015 Freescale Semiconductor, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+#include "imx6sx-sdb.dtsi"
+
+/ {
+	model = "Freescale i.MX6 SoloX SDB RevB Board";
+
+	regulators {
+		/* Transceiver EN/STBY is active low on RevB board */
+		reg_can_stby: regulator@10 {
+			gpio = <&gpio4 27 GPIO_ACTIVE_LOW>;
+		};
+	};
+	bt_rfkill {
+		compatible = "fsl,mxc_bt_rfkill";
+		bt-power-gpios = <&gpio6 11 0>;
+		status = "okay";
+	};
+	usdhc3_pwrseq: usdhc3_pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		reset-gpios = <&gpio6 10 GPIO_ACTIVE_LOW>;
+	};
+};
+
+&cpu0 {
+	operating-points = <
+		/* kHz    uV */
+		996000  1250000
+		792000  1175000
+		396000  1175000
+	>;
+	fsl,soc-operating-points = <
+		/* ARM kHz      SOC uV */
+		996000  1250000
+		792000  1175000
+		396000  1175000
+	>;
+
+	fsl,arm-soc-shared = <1>;
+};
+
+&reg_arm {
+	vin-supply = <&sw1a_reg>;
+	regulator-allow-bypass;
+};
+
+&reg_soc {
+	vin-supply = <&sw1a_reg>;
+	regulator-allow-bypass;
+};
+
+&qspi2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_qspi2>;
+	status = "okay";
+
+#ifndef SPANSIONFLASH
+	ddrsmp=<0>;
+
+	flash0: n25q256a@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "micron,n25q256a", "jedec,spi-nor";
+		spi-max-frequency = <29000000>;
+		reg = <0>;
+	};
+
+	flash1: n25q256a@1 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "micron,n25q256a", "jedec,spi-nor";
+		spi-max-frequency = <29000000>;
+		reg = <1>;
+	};
+#endif
+};
+
+&reg_arm {
+	vin-supply = <&sw1a_reg>;
+	regulator-allow-bypass;
+};
+
+&reg_soc {
+	vin-supply = <&sw1a_reg>;
+	regulator-allow-bypass;
+};
+
+&usbphy1 {
+	fsl,tx-d-cal = <106>;
+};
+
+&usbphy2 {
+	fsl,tx-d-cal = <106>;
+};
+
+&usdhc2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usdhc2_2>;
+	bus-width = <1>;
+};
+
+&vcc_sd3 {
+	regulator-always-on;
+};
+
+&usdhc3 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_wifi_sdio>;
+	bus-width = <4>;
+	no-1-8-v;	/* force 3.3V VIO */
+	non-removable;
+	mmc-pwrseq = <&usdhc3_pwrseq>;
+	pm-ignore-notify;
+	cap-power-off-card;
+	status = "okay";
+
+	brcmf: bcrmf@1 {
+		reg = <1>;
+		compatible = "brcm,bcm4329-fmac";
+	};
+
+};
+
+&uart3 { /* ttymxc2 for Murata BCM4339 V1 Bluetooth. */
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_bt_uart>;
+	fsl,uart-has-rtscts;
+	status = "okay";
+};

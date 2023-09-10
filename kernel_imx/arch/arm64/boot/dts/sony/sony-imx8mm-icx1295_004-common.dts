@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright 2019 Sony Video & Sound Products Inc.
+ */
+
+&i2c2 {
+	typec1_fusb303d: fusb303d@31 {
+		sink-only = <0x1>;
+	};
+};

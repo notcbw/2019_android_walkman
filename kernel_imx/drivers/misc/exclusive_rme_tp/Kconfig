@@ -1,0 +1,8 @@
+#
+# Exclusive Module of RME FW write driver & Touch Panel driver configuration
+#
+
+config EXCLUSIVE_RME_TP
+	bool "exclusive rme and tp module"
+	help
+	  exclusive rme and tp module.

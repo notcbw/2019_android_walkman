@@ -1,0 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright 2019 Sony Home Entertainment & Sound Products Inc.
+ * Copyright 2021 Sony Corporation
+ */
+
+#include "sony-imx8mm-icx1295-5.dts"
+#include "sony-imx8mm-icx1295_004-common.dts"
+

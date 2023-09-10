@@ -1,0 +1,44 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright 2019 Sony Home Entertainment & Sound Products Inc.
+ * Copyright 2021 Sony Corporation
+ */
+
+#include "sony-imx8mm-icx1293-common.dts"
+
+&usdhc3 {
+	fsl,emmc-drive-strength-tsb = <1>; /* For Toshiba */
+	fsl,emmc-drive-strength-hyx = <0>; /* For Hynix */
+	fsl,emmc-drive-strength-smg = <0>; /* For Samsung */
+	fsl,emmc-drive-strength-smg-1 = <4>; /* For Samsung specific device */
+	fsl,strobe-dll-delay-target = <9>;
+};
+
+
+&iomuxc {
+	imx8mm-evk {
+		pinctrl_usdhc3_200mhz: usdhc3grp200mhz {
+			fsl,pins = <
+				MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK		0x196
+				MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD		0x1d2
+				MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0		0x1d4
+				MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1		0x1d4
+				MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2		0x1d4
+				MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3		0x1d4
+				MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4		0x1d4
+				MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5		0x1d4
+				MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6		0x1d4
+				MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7		0x1d4
+				MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE		0x190
+			>;
+		};
+	};
+};
+
+/ {
+	reg-virtual {
+		compatible = "sony,icx-virtual-regulator";
+		/* lpa-poff-gpio = <&gpio4 5 GPIO_ACTIVE_HIGH>; */
+	};
+};
+

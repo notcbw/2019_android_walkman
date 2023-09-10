@@ -1,0 +1,10 @@
+menu "GPS Pin control support"
+
+config GPS_PIN_CTRL
+	tristate "gps pin control"
+	default n
+	help
+	  enable gps pin control
+
+endmenu
+

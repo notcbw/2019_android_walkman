@@ -1,0 +1,66 @@
+/*
+ * Copyright 2019 Sony Home Entertainment & Sound Products Inc.
+ *
+ * SPDX-License-Identifier: GPL-2.0
+ */
+#ifndef _GPIO_KEYS_H
+#define _GPIO_KEYS_H
+
+struct device;
+
+/**
+ * struct gpio_keys_button - configuration parameters
+ * @code:		input event code (KEY_*, SW_*)
+ * @gpio:		%-1 if this key does not support gpio
+ * @active_low:		%true indicates that button is considered
+ *			depressed when gpio is low
+ * @desc:		label that will be attached to button's gpio
+ * @type:		input event type (%EV_KEY, %EV_SW, %EV_ABS)
+ * @wakeup:		configure the button as a wake-up source
+ * @debounce_interval:	debounce ticks interval in msecs
+ * @can_disable:	%true indicates that userspace is allowed to
+ *			disable button via sysfs
+ * @disable_to_release: %true indicates that key release event will
+ *                      be sent when the key is disabled
+ * @wakeup_debounce:    %true indicates that debounce is necessary
+ *                      when resume
+ * @value:		axis value for %EV_ABS
+ * @irq:		Irq number in case of interrupt keys
+ */
+struct gpio_keys_button {
+	unsigned int code;
+	int gpio;
+	int active_low;
+	const char *desc;
+	unsigned int type;
+	int wakeup;
+	int debounce_interval;
+	bool can_disable;
+	bool disable_to_release;
+	bool wakeup_debounce;
+	int value;
+	unsigned int irq;
+};
+
+/**
+ * struct gpio_keys_platform_data - platform data for gpio_keys driver
+ * @buttons:		pointer to array of &gpio_keys_button structures
+ *			describing buttons attached to the device
+ * @nbuttons:		number of elements in @buttons array
+ * @poll_interval:	polling interval in msecs - for polling driver only
+ * @rep:		enable input subsystem auto repeat
+ * @enable:		platform hook for enabling the device
+ * @disable:		platform hook for disabling the device
+ * @name:		input device name
+ */
+struct gpio_keys_platform_data {
+	const struct gpio_keys_button *buttons;
+	int nbuttons;
+	unsigned int poll_interval;
+	unsigned int rep:1;
+	int (*enable)(struct device *dev);
+	void (*disable)(struct device *dev);
+	const char *name;
+};
+
+#endif
