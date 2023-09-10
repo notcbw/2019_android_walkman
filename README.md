@@ -10,13 +10,19 @@ The encrypted data is a standard Android OTA update zip file. The transformation
 
 The encryption key is stored in plain text at `/vendor/usr/data/icx_nvp.cfg` as a 48 character long ASCII text. The first 32 bytes are the AES key and the next 16 bytes are the initialisation vector. NW-A100 series and NW-ZX500 series has different keys.
 
+### Key Combo to Fastboot Mode
+
+Hold Vol- & Vol+ & Next & Play/Pause when powering on.
+
+## Guides
+
 ### Bootloader Unlocking
 
-It supports bootloader unlocking. You can access the fastboot mode by either ADB or holding vol-, vol+, next and play/pause button at startup. After executing `fastboot oem unlock`, it appears to be stuck, but it's actually trying to wipe the userdata partition of the device. It would take around 500 seconds. 
+This will erase all user data. In developer options, enable OEM unlocking and ADB debugging. Run `adb reboot bootloader` to enter fastboot mode. In fastboot mode (SONY logo), run `fastboot oem unlock`. After running that, it will appear to be stuck, but the device is actually trying to wipe the userdata partition. It would take around 500 seconds. After that, run `fastboot reboot` to reboot to OS.
 
 ### Disabling AVB
 
-To disable the AVB, find an empty vbmeta partition then flash it with the following command: `fastboot --disable-verity --disable-verification flash vbmeta <empty vbmeta file>`. It will bootloop first, then it would boot to recovery, saying that it failed to boot the Android system. You need to do a factory reset here. After a factory reset everything should be fine.
+This step is required to use custom kernels. To disable the AVB, flash the blank vbmeta file with the following command: `fastboot --disable-verity --disable-verification flash vbmeta blank_vbmeta.img`. It will bootloop first, then it would boot to recovery, saying that it failed to boot the Android system. You need to do a factory reset here. After a factory reset the OS should boot correctly.
 
 ### Kernel
 
