@@ -21,3 +21,7 @@ To disable the AVB, find an empty vbmeta partition then flash it with the follow
 ### Kernel
 
 The kernel source is at [https://prodgpl.blob.core.windows.net/download/Audio/20211022/gpl_source.tgz](https://prodgpl.blob.core.windows.net/download/Audio/20211022/gpl_source.tgz). Use android\_dmp1\_defconfig. You can build it after a few modifications with the official ARM GNU Toolchain. Clang/LLVM might not work so well.
+
+## Unpacked Fastboot Firmware
+
+- NW-ZX500 4.04 Chinese Version (No Google services, better battery life): [https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing](https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing)
