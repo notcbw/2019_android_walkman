@@ -28,6 +28,12 @@ This step is required to use custom kernels. To disable the AVB, flash the blank
 
 The kernel source is at [https://prodgpl.blob.core.windows.net/download/Audio/20211022/gpl_source.tgz](https://prodgpl.blob.core.windows.net/download/Audio/20211022/gpl_source.tgz). Use android\_dmp1\_defconfig. You can build it after a few modifications with the official ARM GNU Toolchain. Clang/LLVM might not work so well.
 
+### Unpacking Update Files
+
+You need your key string for the device first. Enable adb, then execute `adb shell cat /vendor/usr/data/icx_nvp.cfg`. You can find you key string at the NAS section. Make sure you have java version >1.8 in you path by executing `java -version`. Download the firmware decryptor [HERE](https://github.com/notcbw/2019_android_walkman/releases/download/v0/nwwmdecrypt.jar). Run the decryptor by executing `java -jar nwwmdecrypt.jar -i <input file> -o <output file> -k <key string>` in your terminal/CMD/Powershell.
+
+After decrypting, extract the zip file. Use [payload_dumper](https://github.com/vm03/payload_dumper) to unpack the payload.bin file in the extracted zip file.
+
 ## Unpacked Fastboot Firmware
 
 - NW-ZX500 series 4.04 Chinese Version (No Google services, better battery life): [https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing](https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing)
