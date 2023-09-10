@@ -12,7 +12,7 @@ The encryption key is stored in plain text at `/vendor/usr/data/icx_nvp.cfg` as 
 
 ### Key Combo to Fastboot Mode
 
-Hold Vol- & Next when powering on.
+Hold Vol- & FF when powering on.
 
 ## Guides
 
