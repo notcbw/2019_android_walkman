@@ -14,6 +14,10 @@ The encryption key is stored in plain text at `/vendor/usr/data/icx_nvp.cfg` as 
 
 Hold Vol- & FF when powering on.
 
+### NVP
+
+All the configuration, flags, keys, etc. are stored in the nvp as raw fields. `nvp`, `nvpflag`, `nvpinfo`, `nvpnode`, `nvpstr` and `nvptest` in `/vendor/bin` are believed to be debug tools used to manipulate the values in nvp. `nvp` is used to display the binary partition in hex format. `nvpflag` is used to view and write some flags such as destination. `nvpstr` controls some other string variables in nvp. The purposes of the others are unknown.
+
 ## Guides
 
 ### Bootloader Unlocking
@@ -26,7 +30,17 @@ This step is required to use custom kernels. To disable the AVB, flash the blank
 
 ### Kernel
 
-The kernel source is at [https://prodgpl.blob.core.windows.net/download/Audio/20211022/gpl_source.tgz](https://prodgpl.blob.core.windows.net/download/Audio/20211022/gpl_source.tgz). Use android\_dmp1\_defconfig. You can build it after a few modifications with the official ARM GNU Toolchain. Clang/LLVM might not work so well.
+The kernel source in this repo was patched with KernelSU support, lower CPU frequency support and a more power-saving cpu frequency governor. Use `walkman.config` in kernel_imx to build the kernel.
+
+### Changing Destination (Removing Volume Cap)
+
+1. Flash the KernelSU enabled boot.img to the device.
+2. Enable superuser for shell in KernelSU app.
+3. Enable ADB debugging in developer options
+4. Connect Walkman to PC through USB. Execute `adb shell` to enter shell.
+5. Execute `su -` to gain root privilege.
+6. Execute `nvpflag shp 0x00000006 0x00000000` then `nvpflag sid 0x00000000` to switch the destination code to E. (for UAE, SEA, HK, SK and Oceania markets, with high-gain support)
+7. Disconnect USB connection. Reboot your Walkman.
 
 ### Unpacking Update Files
 
