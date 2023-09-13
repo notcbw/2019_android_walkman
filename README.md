@@ -2,19 +2,23 @@
 
 ## Guides
 
+### <ins>For Windows Users Only</ins>:
+
+Fastboot doesn't work on Windows. You will have to download uuu [HERE](https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.5.21/uuu.exe). Then use `uuu FB: <command>` instead of `fastboot <command>` when fastboot commands are used.
+
 ### Bootloader Unlocking
 
 This will erase all user data. In developer options, enable OEM unlocking and ADB debugging. Run `adb reboot bootloader` to enter fastboot mode. In fastboot mode (SONY logo), run `fastboot oem unlock`. After running that, it will appear to be stuck, but the device is actually trying to wipe the userdata partition. It would take around 500 seconds. After that, run `fastboot reboot` to reboot to OS.
 
 ### Disabling AVB
 
-This step is required to use custom kernels. To disable the AVB, flash the blank vbmeta file with the following command: `fastboot --disable-verity --disable-verification flash vbmeta blank_vbmeta.img`. It will bootloop first, then it would boot to recovery, saying that it failed to boot the Android system. You need to do a factory reset here. After a factory reset the OS should boot correctly.
+This step is required to use custom kernels. To disable the AVB, flash the blank vbmeta file with the following command: `fastboot --disable-verity --disable-verification flash vbmeta_a blank_vbmeta.img`. It will bootloop first, then it would boot to recovery, saying that it failed to boot the Android system. You need to do a factory reset here. After a factory reset the OS should boot correctly.
 
 ### Kernel
 
 The kernel source in this repo was patched with KernelSU support, lower CPU frequency support and a more power-saving cpu frequency governor. Use the `walkman.config` file provided as the config.
 
-My prebuilt one is [HERE](https://github.com/notcbw/2019_android_walkman/releases/tag/v1). Flash it with command: `fastboot flash boot boot-zx500.img`.
+My prebuilt one is [HERE](https://github.com/notcbw/2019_android_walkman/releases/tag/v1). Flash it with command: `fastboot flash boot_a boot-zx500.img`.
 
 ### Changing Destination (Removing Volume Cap)
 
