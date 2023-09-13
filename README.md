@@ -4,7 +4,7 @@
 
 ### <ins>For Windows Users Only</ins>:
 
-Fastboot doesn't work on Windows. You will have to download uuu [HERE](https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.5.21/uuu.exe). Then use `uuu FB: <command>` instead of `fastboot <command>` when fastboot commands are used.
+Fastboot doesn't work on Windows. You will have to download uuu [HERE](https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.5.21/uuu.exe). Then use `.\uuu FB: <command>` instead of `fastboot <command>` when fastboot commands are used.
 
 ### Bootloader Unlocking
 
