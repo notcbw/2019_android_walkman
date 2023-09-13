@@ -35,6 +35,26 @@ My prebuilt one is [HERE](https://github.com/notcbw/2019_android_walkman/release
 7. Execute `nvpflag shp 0x00000006 0x00000000` then `nvpflag sid 0x00000000` to switch the destination code to E. (for UAE, SEA, HK, SK and Oceania markets, with high-gain support)
 8. Disconnect USB connection. Reboot your Walkman. The high-gain option should be available.
 
+### Add More CPU Frequency Levels
+
+Choose a dtbo file then flash it into the dtbo partition: `fastboot flash dtbo_a dtbo.img`.
+
+If you wish to mod the frequency and voltage by yourself, use [Android boot image editor](https://github.com/cfig/Android_boot_image_editor) to unpack your original dtbo file from the unpacked firmware update, then change the line 46 (operating-points) of every unpacked .dts file to something like this:
+
+```
+operating-points = <
+    1200000 850000
+    1000000 850000
+    800000 850000
+    700000 800000
+    600000 750000
+    400000 700000
+    200000 700000
+>;
+```
+
+Afte changing the dts files, repack the dtbo file then flash it to your device.
+
 ### Unpacking Update Files
 
 You need your key string for the device first. Enable adb, then execute `adb shell cat /vendor/usr/data/icx_nvp.cfg`. You can find you key string at the NAS section. Make sure you have java version >1.8 in you path by executing `java -version`. Download the firmware decryptor [HERE](https://github.com/notcbw/2019_android_walkman/releases/download/v0/nwwmdecrypt.jar). Run the decryptor by executing `java -jar nwwmdecrypt.jar -i <input file> -o <output file> -k <key string>` in your terminal/CMD/Powershell.

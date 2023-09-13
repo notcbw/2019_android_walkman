@@ -56,7 +56,7 @@ public class Main {
             }
         }
 
-        if (inputFn.isBlank() || outputFn.isBlank() || keyString.isBlank()) {
+        if (inputFn.equals("") || outputFn.equals("") || keyString.equals("")) {
             System.out.println("Bad arguments!");
             PrintHelpMsg();
             System.exit(1);
