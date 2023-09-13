@@ -2,9 +2,13 @@
 
 ## Guides
 
+### <ins>Disclaimer</ins>
+
+I have only tested the following steps on a Mac. I am NOT responsible and will not listen to your rant if you have bricked/fried your device. I don't solve technical problems on your end. I won't teach you the basics like how to install adb or how to execute a command.
+
 ### <ins>For Windows Users Only</ins>:
 
-Fastboot doesn't work on Windows. You will have to download uuu [HERE](https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.5.21/uuu.exe). Then use `.\uuu FB: <command>` instead of `fastboot <command>` when fastboot commands are used.
+Fastboot doesn't work on Windows for some unknown reason. You will have to download uuu [HERE](https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.5.21/uuu.exe). Then use `.\uuu FB: <command>` instead of `fastboot <command>` when fastboot commands are used. If you have a Linux machine or a Mac, you should use it instead of your Windows PC. 
 
 ### Bootloader Unlocking
 
