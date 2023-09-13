@@ -1,0 +1,1 @@
+KCFLAGS+=" -Wno-error=address-of-packed-member -Wno-error=missing-attributes -Wno-error=incompatible-pointer-types -Wno-error=switch-unreachable -Wno-error=maybe-uninitialized" make O=out ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- DTB_FILE_NAME=sony-imx8mm-icx1295 -j12
