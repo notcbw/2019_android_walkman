@@ -2,31 +2,60 @@
 
 ## Guides
 
+This guide is only for advanced users who already knows some basic terminal commands, ADB or fastboot. Android Platform Tools (ADB and stuff) is required
+
 ### <ins>Disclaimer</ins>
 
 I have only tested the following steps on a Mac. I am NOT responsible and will not listen to your rant if you have bricked/fried your device. I don't solve technical problems on your end. I won't teach you the basics like how to install adb or how to execute a command.
 
 ### <ins>For Windows Users Only</ins>:
 
-Fastboot doesn't work on Windows for some unknown reason. You will have to download uuu [HERE](https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.5.21/uuu.exe). Then use `.\uuu FB: <command>` instead of `fastboot <command>` when fastboot commands are used. If you have a Linux machine or a Mac, you should use it instead of your Windows PC. 
+Please do the following steps first:
+
+1. Enable USB Debugging in Developer options on your Walkman
+2. Connect your Walkman to your Windows PC.
+3. Make sure you can use `adb`. Execute `adb shell getprop ro.boot.slot_suffix`
+4. Take note of the output. It should be either "_a" or "_b".
+5. Download uuu [HERE](https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.5.21/uuu.exe)
+6. Put `uuu.exe` in your working directory. Try executing `uuu` to see if it works.
+
+The output of the command will be the suffix of the partition when executing `uuu` commands.
 
 ### Bootloader Unlocking
 
-This will erase all user data. In developer options, enable OEM unlocking and ADB debugging. Run `adb reboot bootloader` to enter fastboot mode. In fastboot mode (SONY logo), run `fastboot oem unlock`. After running that, it will appear to be stuck, but the device is actually trying to wipe the userdata partition. It would take around 500 seconds. After that, run `fastboot reboot` to reboot to OS.
+This will erase all user data. 
+1. In developer options, enable OEM unlocking and ADB debugging.
+2. Run `adb reboot bootloader` to enter fastboot mode.
+3. In fastboot mode (SONY logo), run:
+    - Mac/Linux: `fastboot oem unlock`
+    - Windows: `uuu FB: oem unlock`
+4. After running that, it will appear to be stuck, but the device is actually trying to wipe the userdata partition. It would take around 500 seconds.
+5. After the process has finished, run the following command to reboot.
+   - Mac/Linux: `fastboot reboot`
+   - Windows: `uuu FB: reboot`
 
 ### Disabling AVB
 
-This step is required to use custom kernels. To disable the AVB, flash the blank vbmeta file with the following command: `fastboot --disable-verity --disable-verification flash vbmeta_a blank_vbmeta.img`. It will bootloop first, then it would boot to recovery, saying that it failed to boot the Android system. You need to do a factory reset here. After a factory reset the OS should boot correctly.
+This step is required to use custom kernels. To disable the AVB, flash the blank vbmeta file with the following command: 
+- Mac/Linux: `fastboot --disable-verity --disable-verification flash vbmeta blank_vbmeta.img`
+- Windows(_a): `uuu FB: flash vbmeta_a blank_vbmeta.img`
+- Windows(_b): `uuu FB: flash vbmeta_b blank_vbmeta.img`
+
+It will bootloop first, then it would boot to recovery, saying that it failed to boot the Android system. You need to choose the factory reset option here. Use volume to control the cursor and the power button to confirm. After a factory reset the OS should boot correctly.
 
 ### Kernel
 
 The kernel source in this repo was patched with KernelSU support, lower CPU frequency support and a more power-saving cpu frequency governor. Use the `walkman.config` file provided as the config.
 
-My prebuilt one is [HERE](https://github.com/notcbw/2019_android_walkman/releases/tag/v1). Flash it with command: `fastboot flash boot_a boot-zx500.img`.
+My prebuilt one is [HERE](https://github.com/notcbw/2019_android_walkman/releases/tag/v1). To flash it, enter fastboot, then execute: (If you have a a100, change the file name)
 
-### Changing Destination (Removing Volume Cap)
+- Mac/Linux: `fastboot flash boot boot-zx500.img`.
+- Windows(_a): `uuu FB: flash boot_a boot-zx500.img`
+- Windows(_b): `uuu FB: flash boot_b boot-zx500.img`
 
-1. Flash the prebuilt KernelSU enabled boot.img to the device.
+### Changing Destination (Removing Volume Cap for ZX500, not tested and probably have no effect for A100)
+
+1. Do everything mentioned above (bootloader unlocking, disabling avb, then flash the provided kernel)
 2. Download and install KernelSU app from [HERE](https://github.com/tiann/KernelSU/releases/download/v0.6.7/KernelSU_v0.6.7_11210-release.apk)
 3. Open KernelSU app. Enable superuser for shell in KernelSU app.
 4. Enable ADB debugging in developer options
@@ -35,27 +64,9 @@ My prebuilt one is [HERE](https://github.com/notcbw/2019_android_walkman/release
 7. Execute `nvpflag shp 0x00000006 0x00000000` then `nvpflag sid 0x00000000` to switch the destination code to E. (for UAE, SEA, HK, SK and Oceania markets, with high-gain support)
 8. Disconnect USB connection. Reboot your Walkman. The high-gain option should be available.
 
-### Add More CPU Frequency Levels
+## Findings
 
-Choose a dtbo file then flash it into the dtbo partition: `fastboot flash dtbo_a dtbo.img`.
-
-If you wish to mod the frequency and voltage by yourself, use [Android boot image editor](https://github.com/cfig/Android_boot_image_editor) to unpack your original dtbo file from the unpacked firmware update, then change the line 46 (operating-points) of every unpacked .dts file to something like this:
-
-```
-operating-points = <
-    1200000 850000
-    1000000 850000
-    800000 850000
-    700000 800000
-    600000 750000
-    400000 700000
-    200000 700000
->;
-```
-
-Afte changing the dts files, repack the dtbo file then flash it to your device.
-
-### Unpacking Update Files
+## Unpacking Update Files
 
 You need your key string for the device first. Enable adb, then execute `adb shell cat /vendor/usr/data/icx_nvp.cfg`. You can find you key string at the NAS section. Make sure you have java version >1.8 in you path by executing `java -version`. Download the firmware decryptor [HERE](https://github.com/notcbw/2019_android_walkman/releases/download/v0/nwwmdecrypt.jar). Run the decryptor by executing `java -jar nwwmdecrypt.jar -i <input file> -o <output file> -k <key string>` in your terminal/CMD/Powershell.
 
@@ -66,8 +77,6 @@ After decrypting, extract the zip file. Use [payload_dumper](https://github.com/
 - NW-ZX500 series 4.06 International: [https://drive.google.com/file/d/1TUFwOOrex2miPd41UAhe8ioKbxIv4M0R/view?usp=sharing](https://drive.google.com/file/d/1TUFwOOrex2miPd41UAhe8ioKbxIv4M0R/view?usp=sharing)
 - NW-ZX500 series 4.04 Chinese Version (No Google services, better battery life): [https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing](https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing)
 - NW-A100 series 4.06 International: [https://drive.google.com/file/d/1hiNf9VFeh0osPwbGtI2NeH9T5AHZtUJK/view?usp=sharing](https://drive.google.com/file/d/1hiNf9VFeh0osPwbGtI2NeH9T5AHZtUJK/view?usp=sharing)
-
-## Findings
 
 ### Firmware Update File
 
