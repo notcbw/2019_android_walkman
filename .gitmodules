@@ -1,7 +1,3 @@
-[submodule "WalkmanUSBAudio/app/src/main/cpp/3rdparty/tinyalsa"]
-	path = WalkmanUSBAudio/app/src/main/cpp/3rdparty/tinyalsa
-	url = https://github.com/notcbw/tinyalsa.git
-
 [submodule "kernel_imx/KernelSU"]
 	path = kernel_imx/KernelSU
 	url = https://github.com/tiann/KernelSU.git

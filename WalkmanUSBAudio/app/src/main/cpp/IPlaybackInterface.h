@@ -5,10 +5,18 @@
 #ifndef WALKMAN_USB_AUDIO_IPLAYBACKINTERFACE_H
 #define WALKMAN_USB_AUDIO_IPLAYBACKINTERFACE_H
 
+#include <memory>
+#include <tuple>
+#include "UacEventListener.h"
+
 namespace WmUsbAudio {
 
-    class IPlaybackInterface {
+    typedef std::tuple<size_t, void*> AudioPacket;
 
+    class IPlaybackInterface : public UacEventReceiver {
+    public:
+        virtual void ProcessUacEvent(const struct UacEvent *event) = 0;
+        virtual void ProcessAudio(AudioPacket packet) = 0;
     };
 
 } // WmUsbAudio

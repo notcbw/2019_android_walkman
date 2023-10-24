@@ -7,39 +7,50 @@
 
 #include <thread>
 #include <vector>
+#include <memory>
 #include <linux/netlink.h>
+#include "android_log.h"
 
-#define NL_MAX_PAYLOAD 8192
+#define NL_MAX_PAYLOAD 512
+#define TAG "UacEventListener"
 
 namespace WmUsbAudio {
 
+    enum class UacEventState: short { NONE, PLAY, STOP };
+    enum class UacEventFormat: short { NONE, PCM, DSD };
+
     struct UacEvent {
-        short action;
-        short format;
+        UacEventState state;
+        UacEventFormat format;
         short bitwidth;
         short subslot;
         unsigned int freq;
     };
 
+    void log_uac_event(struct UacEvent* event);
+
     class UacEventReceiver {
-        virtual void UacEventProcess(struct UacEvent *event) = 0;
+    public:
+        virtual void ProcessUacEvent(const struct UacEvent *event) = 0;
     };
 
     class NullEventReceiver : public UacEventReceiver {
-        void UacEventProcess(struct UacEvent *event) {
+        void ProcessUacEvent(const struct UacEvent *event) {
             // do nothing
+            LOGD("Null event receiver: event processed");
         }
     };
 
     class UacEventListener {
     public:
-        UacEventListener(UacEventReceiver *receiver);
+        UacEventListener();
+        UacEventListener(std::vector<UacEventReceiver *>& receivers);
         ~UacEventListener();
 
-        void SetReceiver(UacEventReceiver *receiver);
-
+        std::vector<UacEventReceiver *> &GetReceivers();
+        void SetReceivers(std::vector<UacEventReceiver *> recv);
     private:
-        UacEventReceiver *receiver;
+        std::vector<UacEventReceiver *> receivers;
         std::thread listener_thread;
         bool cancel;
         int nl_socket;
