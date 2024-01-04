@@ -1,12 +1,16 @@
-# Documenting 2019 Android-based Walkmans
+# Android Walkman(2019年リリース)についてのドキュメント
 
-## Guides
+## はじめに
 
-This guide is only for advanced users who already knows some basic terminal commands, ADB or fastboot. Android Platform Tools (ADB and stuff) is required
+このガイドは、ADBやfastbootといった、基本的なコマンドを知っているユーザーのみを対象としています。  
+Android プラットフォーム ツール も必要です。[こちら](https://mitanyan98.hatenablog.com/entry/2023/04/04/150957)を参考に準備してください。
 
-### <ins>Disclaimer</ins>
+### <ins>免責事項</ins>
 
-I have only tested the following steps on a Mac. I am NOT responsible and will not listen to your rant if you have bricked/fried your device. I don't solve technical problems on your end. I won't teach you the basics like how to install adb or how to execute a command.
+- ~~以下の手順はMacでのみテストしました。~~  
+- あなたが何かミスをしてデバイスを壊しても、私は責任を負いません、文句も受け付けません。 
+- あなたの隣で技術的な問題を解決することはしません。 
+- adbのインストール方法やコマンドの実行方法などの基本的なことは教えません。 
 
 ### <ins>For Windows Users Only</ins>:
 
@@ -21,7 +25,7 @@ Please do the following steps first:
 
 The output of the command will be the suffix of the partition when executing `uuu` commands.
 
-### Bootloader Unlocking
+## Bootloader Unlocking
 
 This will erase all user data. 
 1. In developer options, enable OEM unlocking and ADB debugging.
@@ -43,7 +47,7 @@ This step is required to use custom kernels. To disable the AVB, flash the blank
 
 It will bootloop first, then it would boot to recovery, saying that it failed to boot the Android system. You need to choose the factory reset option here. Use volume to control the cursor and the power button to confirm. After a factory reset the OS should boot correctly.
 
-### Kernel
+## Kernel
 
 The kernel source in this repo was patched with KernelSU support, lower CPU frequency support and a more power-saving cpu frequency governor. Use the `walkman.config` file provided as the config.
 
