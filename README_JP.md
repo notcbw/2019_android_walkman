@@ -12,42 +12,48 @@ Android プラットフォーム ツール も必要です。[こちら](https:/
 - あなたの隣で技術的な問題を解決することはしません。 
 - adbのインストール方法やコマンドの実行方法などの基本的なことは教えません。 
 
-### <ins>For Windows Users Only</ins>:
+### <ins>Windowsユーザー向け</ins>:
 
-Please do the following steps first:
+まず、次の手順に従ってください。: 
 
-1. Enable USB Debugging in Developer options on your Walkman
-2. Connect your Walkman to your Windows PC.
-3. Make sure you can use `adb`. Execute `adb shell getprop ro.boot.slot_suffix`
-4. Take note of the output. It should be either "_a" or "_b".
-5. Download uuu [HERE](https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.5.21/uuu.exe)
-6. Put `uuu.exe` in your working directory. Try executing `uuu` to see if it works.
+1. Walkmanの開発者向けオプションで、USB デバッグを有効にする 
+2. WalkmanをWindows PCに接続する
+3. `adb`コマンドが実行できるか確認し、`adb shell getprop ro.boot.slot_suffix`を実行する
+4. 出力された結果から、実行パーティションが「a」か「b」のどちらか確認してメモする
+5. [こちら](https://github.com/nxp-imx/mfgtools/releases)から`uuu.exe`をダウンロードする
+6. `uuu.exe`を作業用ディレクトリに置き、`uuu`コマンドが動作するかを確認する
+7. 上手く動作しない場合、`uuu.exe`を直接ターミナルにドラッグして実行することもできます
 
-The output of the command will be the suffix of the partition when executing `uuu` commands.
+`uuu`コマンドは、実行中のパーティションにのみ影響を与えます。
 
-## Bootloader Unlocking
+## ブートローダーのアンロック
 
-This will erase all user data. 
-1. In developer options, enable OEM unlocking and ADB debugging.
-2. Run `adb reboot bootloader` to enter fastboot mode.
-3. In fastboot mode (SONY logo), run:
+ブートローダー・アンロック(BLU)を行うことで、全てのデータが削除されますのでご注意ください。  
+また、[最新版「4.06」までアップデートしていても「4.04」まで戻ってしまう例](https://github.com/notcbw/2019_android_walkman/issues/1#issuecomment-1721653902)が確認されています。  
+アップデーターに問題は起きないため、もう一度最新版までアップデートしてください。  
+1. 開発者向けオプションで、「OEMロック解除」と「ADBデバッグ」を有効にします 
+2. `adb reboot bootloader`を実行してfastboot モードに入ります
+3.  fastboot モード(SONYのロゴが表示された状態)で、次のコマンドを実行します:
     - Mac/Linux: `fastboot oem unlock`
     - Windows: `uuu FB: oem unlock`
-4. After running that, it will appear to be stuck, but the device is actually trying to wipe the userdata partition. It would take around 500 seconds.
-5. After the process has finished, run the following command to reboot.
+4. これを実行すると、上手く実行できなかったような挙動をますが、実際にはデバイス内でユーザーデータ パーティションを消去しようとしています
+   これには500秒(約8分)ほどかかります。
+5. アンロックが完了したら、次のコマンドを実行して再起動します
    - Mac/Linux: `fastboot reboot`
    - Windows: `uuu FB: reboot`
 
-### Disabling AVB
-
-This step is required to use custom kernels. To disable the AVB, flash the blank vbmeta file with the following command: 
+### AVBの無効化
+この手順はカスタム カーネルを使用するために必要です。  
+AVBを無効にするには、次のコマンドを使用して`blank_vbmeta.img`をフラッシュします。 : 
 - Mac/Linux: `fastboot --disable-verity --disable-verification flash vbmeta blank_vbmeta.img`
 - Windows(_a): `uuu FB: flash vbmeta_a blank_vbmeta.img`
 - Windows(_b): `uuu FB: flash vbmeta_b blank_vbmeta.img`
 
-It will bootloop first, then it would boot to recovery, saying that it failed to boot the Android system. You need to choose the factory reset option here. Use volume to control the cursor and the power button to confirm. After a factory reset the OS should boot correctly.
+最初に数回bootloopが発生し、その後Android システムの起動に失敗したことをリカバリが通知します。  
+ここではfactory resetオプションを選択する必要があります。 ボリュームを使用してカーソルを選択し、電源ボタンを使用して確認します。  
+工場出荷状態にリセットすると、OS が正しく起動するはずです。  
 
-## Kernel
+## カスタムカーネル
 
 The kernel source in this repo was patched with KernelSU support, lower CPU frequency support and a more power-saving cpu frequency governor. Use the `walkman.config` file provided as the config.
 
