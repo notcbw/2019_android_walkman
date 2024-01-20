@@ -84,7 +84,7 @@ UAE、SEA、HK、SKおよびオセアニア市場向けに、ZX500のボリュ�
 
 復号後、zipファイルを解凍します。[payload_dumper](https://github.com/vm03/payload_dumper)を使用して、解凍したzipファイル内のpayload.binファイルを解凍します。
 
-## 解凍済みファームウェアファイル
+### 解凍済みファームウェアファイル
 
 - NW-ZX500シリーズ v4.06 国際版ROM: [https://drive.google.com/file/d/1TUFwOOrex2miPd41UAhe8ioKbxIv4M0R/view?usp=sharing](https://drive.google.com/file/d/1TUFwOOrex2miPd41UAhe8ioKbxIv4M0R/view?usp=sharing)
 - NW-ZX500シリーズ v4.04 中国版ROM (GAppsが無いので、少しだけバッテリー持ちが良いです): [https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing](https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing)
