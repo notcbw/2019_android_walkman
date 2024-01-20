@@ -31,14 +31,14 @@ Android プラットフォーム ツール も必要です。[こちら](https:/
 ブートローダー・アンロック(BLU)を行うことで、全てのデータが削除されますのでご注意ください。  
 また、[最新版「4.06」までアップデートしていても「4.04」まで戻ってしまう例](https://github.com/notcbw/2019_android_walkman/issues/1#issuecomment-1721653902)が確認されています。  
 アップデーターに問題は起きないため、もう一度最新版までアップデートしてください。  
-1. 開発者向けオプションで、「OEMロック解除」と「ADBデバッグ」を有効にします 
-2. `adb reboot bootloader`を実行してfastboot モードに入ります
-3.  fastboot モード(SONYのロゴが表示された状態)で、次のコマンドを実行します
+1. 開発者向けオプションで、「OEMロック解除」と「ADBデバッグ」を有効にする 
+2. `adb reboot bootloader`を実行してfastboot モードに入る
+3.  fastboot モード(SONYのロゴが表示された状態)で、次のコマンドを実行する
     - Mac/Linux: `fastboot oem unlock`
     - Windows: `uuu FB: oem unlock`
-4. これを実行すると、上手く実行できなかったような挙動をますが、実際にはデバイス内でユーザーデータ パーティションを消去しようとしています
+4. これを実行すると、上手く実行できなかったような挙動をしますが、実際にはデバイス内でユーザーデータ パーティションを消去しようとしています
    これには500秒(約8分)ほどかかります
-5. アンロックが完了したら、次のコマンドを実行して再起動します
+5. アンロックが完了したら、次のコマンドを実行して再起動する
    - Mac/Linux: `fastboot reboot`
    - Windows: `uuu FB: reboot`
 
@@ -55,51 +55,61 @@ AVBを無効にするには、次のコマンドを使用して`blank_vbmeta.img
 
 ## カスタムカーネル
 
-The kernel source in this repo was patched with KernelSU support, lower CPU frequency support and a more power-saving cpu frequency governor. Use the `walkman.config` file provided as the config.
+このリポジトリのカーネルソースには、[KernelSU](https://kernelsu.org/)のサポート、より低いCPU周波数と省電力なガバナーのパッチを適用しています。  
+configには提供されている`walkman.config`ファイルを使ってください。
 
-My prebuilt one is [HERE](https://github.com/notcbw/2019_android_walkman/releases/tag/v1). To flash it, enter fastboot, then execute: (If you have a a100, change the file name)
+ビルド済みのカーネルは[こちら](https://github.com/notcbw/2019_android_walkman/releases/)。これをフラッシュするには、fastbootモードに入り、以下のコマンドを実行します。
 
 - Mac/Linux: `fastboot flash boot boot-zx500.img`.
 - Windows(_a): `uuu FB: flash boot_a boot-zx500.img`
 - Windows(_b): `uuu FB: flash boot_b boot-zx500.img`
 
-### Changing Destination (Removing Volume Cap for ZX500, not tested and probably have no effect for A100)
+### リージョン変更の方法
+UAE、SEA、HK、SKおよびオセアニア市場向けに、ZX500のボリューム上限を開放できます。A100は未確認で、おそらく効果はないです。
 
-1. Do everything mentioned above (bootloader unlocking, disabling avb, then flash the provided kernel)
-2. Download and install KernelSU app from [HERE](https://github.com/tiann/KernelSU/releases/download/v0.6.7/KernelSU_v0.6.7_11210-release.apk)
-3. Open KernelSU app. Enable superuser for shell in KernelSU app.
-4. Enable ADB debugging in developer options
-5. Connect Walkman to PC through USB. Execute `adb shell` to enter shell.
-6. Execute `su -` to gain root privilege.
-7. Execute `nvpflag shp 0x00000006 0x00000000` then `nvpflag sid 0x00000000` to switch the destination code to E. (for UAE, SEA, HK, SK and Oceania markets, with high-gain support)
-8. Disconnect USB connection. Reboot your Walkman. The high-gain option should be available.
+1. 上記すべての作業を行う(ブートローダーのアンロック、avbの無効化、カーネルのフラッシュ)
+2. KernelSUアプリを[こちら](https://github.com/tiann/KernelSU/releases/download/v0.6.7/KernelSU_v0.6.7_11210-release.apk)からダウンロード・インストールする
+3. KernelSUアプリを開き、Shell(com.android.shell)のスーパーユーザーを有効にする、
+4. 開発者オプションでADBデバッグを有効化する
+5. USBでWalkmanをPCに接続する。`adb shell`を実行してShellに入る
+6. `su`を実行してroot権限を取得する
+7. `nvpflag shp 0x00000006 0x00000000`を実行し、次に `nvpflag sid 0x00000000`を実行してdestination codeを E に切り替える
+8. USB接続を外し、Walkmanを再起動する。
 
-## Findings
 
-## Unpacking Update Files
+## アップデートファイルの解凍
 
-You need your key string for the device first. Enable adb, then execute `adb shell cat /vendor/usr/data/icx_nvp.cfg`. You can find you key string at the NAS section. Make sure you have java version >1.8 in you path by executing `java -version`. Download the firmware decryptor [HERE](https://github.com/notcbw/2019_android_walkman/releases/download/v0/nwwmdecrypt.jar). Run the decryptor by executing `java -jar nwwmdecrypt.jar -i <input file> -o <output file> -k <key string>` in your terminal/CMD/Powershell.
+まず、デバイスのkey stringが必要です。adbを有効にして、`adb shell cat /vendor/usr/data/icx_nvp.cfg`を実行します。キー文字列はNAS sectionにあります。  
+次に`java -version`を実行し、パスに java バージョン`>1.8`があることを確認します。ファームウェア復号化ツールは[ここ](https://github.com/notcbw/2019_android_walkman/releases/download/v0/nwwmdecrypt.jar)からダウンロードしてください。PowerShellなどのターミナルアプリで`java -jar nwwmdecrypt.jar -i <input file> -o <output file> -k <key string>`を実行して、復号化ツールを実行します。
 
-After decrypting, extract the zip file. Use [payload_dumper](https://github.com/vm03/payload_dumper) to unpack the payload.bin file in the extracted zip file.
+復号後、zipファイルを解凍します。[payload_dumper](https://github.com/vm03/payload_dumper)を使用して、解凍したzipファイル内のpayload.binファイルを解凍します。
 
-## Unpacked Fastboot Firmware
+## 解凍済みファームウェアファイル
 
-- NW-ZX500 series 4.06 International: [https://drive.google.com/file/d/1TUFwOOrex2miPd41UAhe8ioKbxIv4M0R/view?usp=sharing](https://drive.google.com/file/d/1TUFwOOrex2miPd41UAhe8ioKbxIv4M0R/view?usp=sharing)
-- NW-ZX500 series 4.04 Chinese Version (No Google services, better battery life): [https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing](https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing)
-- NW-A100 series 4.06 International: [https://drive.google.com/file/d/1hiNf9VFeh0osPwbGtI2NeH9T5AHZtUJK/view?usp=sharing](https://drive.google.com/file/d/1hiNf9VFeh0osPwbGtI2NeH9T5AHZtUJK/view?usp=sharing)
+- NW-ZX500シリーズ v4.06 国際版ROM: [https://drive.google.com/file/d/1TUFwOOrex2miPd41UAhe8ioKbxIv4M0R/view?usp=sharing](https://drive.google.com/file/d/1TUFwOOrex2miPd41UAhe8ioKbxIv4M0R/view?usp=sharing)
+- NW-ZX500シリーズ v4.04 中国版ROM (GAppsが無いので、少しだけバッテリー持ちが良いです): [https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing](https://drive.google.com/file/d/1z8CucsLx0LJ-0HU50QxVYnx8VHVroP7U/view?usp=sharing)
+- NW-A100シリーズ v4.06 国際版ROM: [https://drive.google.com/file/d/1hiNf9VFeh0osPwbGtI2NeH9T5AHZtUJK/view?usp=sharing](https://drive.google.com/file/d/1hiNf9VFeh0osPwbGtI2NeH9T5AHZtUJK/view?usp=sharing)
 
-### Firmware Update File
+## 調査結果
+【訳者追記】[こちらの記事](https://note.com/forsaken_love02/n/nbfe0c8f87f3c)に一通りの事はまとめました。  
+【For English Users】Please read [this article](https://note.com/forsaken_love02/n/nbfe0c8f87f3c). If you can't read japanese, use translate app.  
 
-The first 128 bytes of the firmware update file contains the file magic and the SHA-228 digest. The first byte is the magic "NWWM", the next 56 bytes is the SHA-224 digest stored as ASCII hex digits. The rest is unknown.
+### Fastbootに入るボタンコンボ
+電源オン時にVol-とFFを押し続けます。
 
-The encrypted data is a standard Android OTA update zip file. The transformation scheme is AES/CBC/PKCS5Padding.
+### アップデート用ファームウェアファイルについて  
+ファームウェアアップデートファイルの最初の128バイトには、ファイルのmagicとSHA-228ダイジェストを含まれています。  
+最初のバイトはmagic"NWWM "で、次の56バイトはASCII 16進数で格納されたSHA-224ダイジェストです。残りは不明です。  
 
-The encryption key is stored in plain text at `/vendor/usr/data/icx_nvp.cfg` as a 48 character long ASCII text. The first 32 bytes are the AES key and the next 16 bytes are the initialisation vector. NW-A100 series and NW-ZX500 series has different keys.
+暗号化されたデータは、標準的なAndroid OTAアップデートのzipファイルです。変換スキームはAES/CBC/PKCS5Paddingです。  
 
-### Key Combo to Fastboot Mode
+暗号化キーはプレーンテキストで`/vendor/usr/data/icx_nvp.cfg`に48文字長のASCIIテキストとして格納されています。  
+最初の 32 バイトがAESキーで、次の 16 バイトが初期化ベクターです。NW-A100シリーズとNW-ZX500シリーズではキーが異なります。  
 
-Hold Vol- & FF when powering on.
-
-### NVP
-
-All the configuration, flags, keys, etc. are stored in the nvp as raw fields. `nvp`, `nvpflag`, `nvpinfo`, `nvpnode`, `nvpstr` and `nvptest` in `/vendor/bin` are believed to be debug tools used to manipulate the values in nvp. `nvp` is used to display the binary partition in hex format. `nvpflag` is used to view and write some flags such as destination. `nvpstr` controls some other string variables in nvp. The purposes of the others are unknown.
+### NVPについて
+- コンフィギュレーション、フラグ、キーなどはすべてraw列としてnvpに格納されています。
+- `vendor/bin`にある `nvp`、`nvpflag`、`nvpinfo`、`nvpnode`、`nvpstr` および `nvptest` は、nvp の値を操作するために使用されるデバッグツールであると考えられます。
+- `nvp` はバイナリのパーティションを16進形式で表示するために使用されます。
+- `nvpflag` はdestinationなどのフラグを表示したり書き込んだりするのに使用されます。
+- `nvpstr` はnvpの他の文字列変数を制御します。
+- その他の変数の使用目的は不明です。
